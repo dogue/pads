@@ -2,6 +2,13 @@
 name = "pads"
 version = "0.2.2"
 edition = "2021"
+description = "A simple CLI tool for swtiching the default/active output device for PulseAudio."
+license = "MIT"
+repository = "https://github.com/dogue/pads"
+readme = "README.md"
+author = "Dogue"
+keywords = ["pulseaudio", "audio devices"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
