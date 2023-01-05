@@ -86,7 +86,11 @@ fn next_device(mut handler: &mut SinkController) -> Result<(), anyhow::Error> {
     let mut index = 0;
 
     if default.index < devices[devices.len() - 1].index {
-        index = default.index + 1;
+        for (i, device) in devices.clone().iter().enumerate() {
+            if device.index == default.index {
+                index = devices[i + 1].index;
+            }
+        }
     }
 
     set_device(&mut handler, index)?;
