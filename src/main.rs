@@ -7,8 +7,8 @@ fn main() -> Result<(), anyhow::Error> {
     let mut handler = SinkController::create()?;
 
     let options = Command::new("PulseAudio Device Switcher")
-        .version("1.0")
-        .author("Dogue <dogue@oddhelix.com>")
+        .version(env!("CARGO_PKG_VERSION"))
+        .author("Dogue")
         .about("Switches the default PulseAudio output device and moves all active applications to that device")
         .propagate_version(true)
         .subcommand_required(true)
@@ -21,6 +21,10 @@ fn main() -> Result<(), anyhow::Error> {
             Command::new("set")
                 .about("Sets the default output device")
                 .arg(arg!(<DEVICE>))
+        )
+        .subcommand(
+            Command::new("next")
+                .about("Cycles to the next device, wrapping back to zero if the active device is the last one")
         )
         .get_matches();
 
@@ -35,6 +39,7 @@ fn main() -> Result<(), anyhow::Error> {
             set_device(&mut handler, device)?;
         }
         Some(("list", _)) => list_devices(&mut handler)?,
+        Some(("next", _)) => next_device(&mut handler)?,
         _ => {}
     };
 
@@ -70,6 +75,19 @@ fn list_devices(handler: &mut SinkController) -> Result<(), anyhow::Error> {
             device.index,
             device.description.unwrap_or("Unknown device".to_owned())
         );
+    }
+
+    Ok(())
+}
+
+fn next_device(mut handler: &mut SinkController) -> Result<(), anyhow::Error> {
+    let devices = handler.list_devices()?;
+    let default = handler.get_default_device()?;
+
+    if default.index < (devices.len() - 1) as u32 {
+        set_device(&mut handler, default.index + 1)?;
+    } else {
+        set_device(&mut handler, 0)?;
     }
 
     Ok(())
