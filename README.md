@@ -1,4 +1,4 @@
-# pads
+# PulseAudio Device Swticher
 A simple CLI tool for swtiching the default/active output device for PulseAudio.
 
 ## Installation
