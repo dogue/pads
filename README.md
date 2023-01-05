@@ -1,4 +1,4 @@
-# PulseAudio Device Swticher
+# PulseAudio Device Switcher
 A simple CLI tool for swtiching the default/active output device for PulseAudio.
 
 ## Installation
