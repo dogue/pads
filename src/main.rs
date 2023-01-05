@@ -83,12 +83,13 @@ fn list_devices(handler: &mut SinkController) -> Result<(), anyhow::Error> {
 fn next_device(mut handler: &mut SinkController) -> Result<(), anyhow::Error> {
     let devices = handler.list_devices()?;
     let default = handler.get_default_device()?;
+    let mut index = 0;
 
-    if default.index < (devices.len() - 1) as u32 {
-        set_device(&mut handler, default.index + 1)?;
-    } else {
-        set_device(&mut handler, 0)?;
+    if default.index < devices[devices.len() - 1].index {
+        index = default.index + 1;
     }
+
+    set_device(&mut handler, index)?;
 
     Ok(())
 }
