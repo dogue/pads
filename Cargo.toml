@@ -1,6 +1,6 @@
 [package]
 name = "pads"
-version = "0.2.3"
+version = "0.2.4"
 edition = "2021"
 description = "A simple CLI tool for swtiching the default/active output device for PulseAudio."
 license = "MIT"
