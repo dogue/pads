@@ -48,7 +48,7 @@ fn set_device(handler: &mut SinkController, index: u32) -> Result<(), anyhow::Er
 
     // Iterate over all currently available output streams and move them to the new default device
     let apps = handler.list_applications()?;
-    for app in apps.clone() {
+    for app in apps {
         handler.move_app_by_index(app.index, index)?;
     }
 
@@ -62,7 +62,7 @@ fn list_devices(handler: &mut SinkController) -> Result<(), anyhow::Error> {
     println!("Available devices (*default):\n");
 
     // Prefix an asterisk to mark the current default device
-    for device in devices.clone() {
+    for device in devices {
         if device.index == default.index {
             print!("*");
         }
@@ -73,14 +73,16 @@ fn list_devices(handler: &mut SinkController) -> Result<(), anyhow::Error> {
         println!(
             "[{}]: {}",
             device.index,
-            device.description.unwrap_or("Unknown device".to_owned())
+            device
+                .description
+                .unwrap_or_else(|| "Unknown device".to_owned())
         );
     }
 
     Ok(())
 }
 
-fn next_device(mut handler: &mut SinkController) -> Result<(), anyhow::Error> {
+fn next_device(handler: &mut SinkController) -> Result<(), anyhow::Error> {
     let devices = handler.list_devices()?;
     let default = handler.get_default_device()?;
     let mut index: u32 = 0;
@@ -99,7 +101,7 @@ fn next_device(mut handler: &mut SinkController) -> Result<(), anyhow::Error> {
         index = devices[0].index;
     }
 
-    set_device(&mut handler, index)?;
+    set_device(handler, index)?;
 
     Ok(())
 }
