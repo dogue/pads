@@ -15,5 +15,4 @@ categories = ["command-line-utilities"]
 [dependencies]
 anyhow = "1.0.68"
 clap = { version = "4.0.32", features = ["derive"] }
-clap_derive = "4.0.21"
 pulsectl-rs = "0.3.2"
