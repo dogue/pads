@@ -8,15 +8,16 @@ Clone the repo and install with cargo via `cargo install --path .`
 ```
 Switches the default PulseAudio output device and moves all active applications to that device
 
-Usage: pads <COMMAND>
+Usage: pads [OPTIONS] <COMMAND>
 
 Commands:
-  list  Lists available output devices
-  set   Sets the default output device
-  next  Cycles to the next device, wrapping back to zero if the active device is the last one
+  list  List available output devices
+  next  Cycle to the next output device
+  set   Set the active device
   help  Print this message or the help of the given subcommand(s)
 
 Options:
-  -h, --help     Print help information
-  -V, --version  Print version information
+  -j, --json     Format output as JSON
+  -h, --help     Print help
+  -V, --version  Print version
   ```
