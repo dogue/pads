@@ -1,6 +1,7 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use pulsectl::controllers::{AppControl, DeviceControl, SinkController};
+use serde::Serialize;
 
 #[derive(Parser, Debug)]
 #[command(author = "Dogue")]
@@ -11,6 +12,9 @@ use pulsectl::controllers::{AppControl, DeviceControl, SinkController};
 struct Options {
     #[command(subcommand)]
     command: Commands,
+
+    #[arg(short = 'j', long = "json", global = true, help = "Format output as JSON")]
+    json_format: bool
 }
 
 #[derive(Subcommand, Debug)]
@@ -32,6 +36,7 @@ fn main() -> Result<(), anyhow::Error> {
 
     match options.command {
         Commands::Set { index } => set_device(&mut handler, index)?,
+        Commands::List if options.json_format => list_devices_json(&mut handler)?,
         Commands::List => list_devices(&mut handler)?,
         Commands::Next => next_device(&mut handler)?,
     };
@@ -81,6 +86,32 @@ fn list_devices(handler: &mut SinkController) -> Result<(), anyhow::Error> {
 
     Ok(())
 }
+
+fn list_devices_json(handler: &mut SinkController) -> Result<(), anyhow::Error> {
+    #[derive(Serialize)]
+    struct DeviceOutput {
+        is_current: bool,
+        index: u32,
+        description: Option<String>
+    }
+    
+    let devices = handler.list_devices()?;
+    let default = handler.get_default_device()?;
+
+    let mut output: Vec<DeviceOutput> = vec![];
+    for device in devices {
+        output.push(DeviceOutput {
+            is_current: device.index == default.index,
+            index: device.index,
+            description: device.description
+        })
+    }
+
+    println!("{}", serde_json::to_string(&output)?);
+
+    Ok(())
+}
+
 
 fn next_device(handler: &mut SinkController) -> Result<(), anyhow::Error> {
     let devices = handler.list_devices()?;
