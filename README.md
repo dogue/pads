@@ -2,7 +2,7 @@
 A simple CLI tool for swtiching the default/active output device for PulseAudio.
 
 ## Installation
-Clone the repo and install with cargo via `cargo install --path .`
+Clone the repo and install with cargo via `cargo install --path .` or install from Crates.io with `cargo install pads`.
 
 ## Usage
 ```
