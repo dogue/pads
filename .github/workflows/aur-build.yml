@@ -1,0 +1,14 @@
+name: Pads AUR Build
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-in: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup
+      run: cargo install cargo-aur
+    - name: Build
+      run: cargo aur
