@@ -114,9 +114,23 @@ fn list_devices_json(handler: &mut SinkController) -> Result<(), anyhow::Error> 
 
 
 fn next_device(handler: &mut SinkController) -> Result<(), anyhow::Error> {
-    let devices = handler.list_devices()?;
+    let all_devices = handler.list_devices()?;
     let default = handler.get_default_device()?;
     let mut index: u32 = 0;
+
+    // Filter out unplugged devices
+    // default device should always be included
+    // active_port.is_none() == true => device is a virtual device
+    // active_port.available == No => device is unplugged
+    let devices = all_devices
+        .iter()
+        .filter(|d| {
+            d.index == default.index
+                || d.active_port.is_none()
+                || d.active_port.as_ref().unwrap().available
+                    != libpulse_sys::pa_port_available_t::No
+        })
+        .collect::<Vec<_>>();
 
     // If the default device is *not* the last in the list
     // Set the next device in the list as the default
