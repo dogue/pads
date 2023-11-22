@@ -16,6 +16,7 @@ homepage = "https://github.com/dogue/pads"
 [dependencies]
 anyhow = "1.0.68"
 clap = { version = "4.0.32", features = ["derive"] }
+libpulse-sys = "1.21.0"
 pulsectl-rs = "0.3.2"
 serde = { version = "^1", features = ["derive"] }
 serde_json = "1.0"
